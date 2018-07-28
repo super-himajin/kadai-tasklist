@@ -4,6 +4,10 @@
 
 <%= form_for(@task) do |f| %>
 
+<%= f.label :status,"ステータス"%>
+
+<%= f.text_field :status %>
+
 <%= f.label:content,"タスク"%>
 
 <%= f.text_field:content %>
