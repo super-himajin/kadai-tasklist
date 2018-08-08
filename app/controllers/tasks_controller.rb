@@ -1,9 +1,9 @@
 class TasksController < ApplicationController
 before_action :require_user_logged_in
-before_action :correct_user, only: [:destroy, :new, :edit, :update]
+before_action :correct_user,only: [:destroy,:show]
 
   def index
-    @tasks = current_user.tasks.page(params[:page])
+    @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
   end
   
   def show
@@ -16,11 +16,11 @@ before_action :correct_user, only: [:destroy, :new, :edit, :update]
 
   def create
     @task = current_user.tasks.build(task_params)
-
     if @task.save
       flash[:success] = 'Task が正常に投稿されました'
       redirect_to root_url
     else
+      @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
       flash.now[:danger] = 'Task が投稿されませんでした'
       render 'toppages/index'
     end
@@ -32,7 +32,6 @@ before_action :correct_user, only: [:destroy, :new, :edit, :update]
 
   def update
     set_task
-
     if @task.save
       flash[:success] = 'Task が正常に投稿されました'
       redirect_to root_url
@@ -47,7 +46,7 @@ before_action :correct_user, only: [:destroy, :new, :edit, :update]
     @task.destroy
 
     flash[:success] = 'Task は正常に削除されました'
-    redirect_to root_url
+    render 'toppages/index'
   end
   
   private
@@ -62,7 +61,7 @@ before_action :correct_user, only: [:destroy, :new, :edit, :update]
   def correct_user
     @task = current_user.tasks.find_by(id: params[:id])
     unless @task
-      redirect_to root_url
+      render 'toppages/index'
     end
   end
 end
