@@ -20,9 +20,8 @@ before_action :correct_user,only: [:destroy,:show, :edit, :update]
       flash[:success] = 'Task が正常に投稿されました'
       redirect_to root_url
     else
-      @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
       flash.now[:danger] = 'Task が投稿されませんでした'
-      render 'toppages/index'
+      render :new
     end
   end
 
@@ -32,12 +31,12 @@ before_action :correct_user,only: [:destroy,:show, :edit, :update]
 
   def update
     set_task
-    if @task.save
+    if @task.update(task_params)
       flash[:success] = 'Task が正常に投稿されました'
       redirect_to root_url
     else
       flash.now[:danger] = 'Task が投稿されませんでした'
-      render 'toppages/index'
+      render :edit
     end
   end
 
