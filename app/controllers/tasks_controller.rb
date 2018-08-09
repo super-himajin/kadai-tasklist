@@ -45,7 +45,7 @@ before_action :correct_user,only: [:destroy,:show, :edit, :update]
     set_task
     @task.destroy
     flash[:success] = 'Task は正常に削除されました'
-    render 'toppages/index'
+    redirect_to root_url
   end
   
   private
