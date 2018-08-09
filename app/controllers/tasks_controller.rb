@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
 before_action :require_user_logged_in
-before_action :correct_user,only: [:destroy,:show]
+before_action :correct_user,only: [:destroy,:show, :edit, :update]
 
   def index
     @tasks = current_user.tasks.order('created_at DESC').page(params[:page])
@@ -44,7 +44,6 @@ before_action :correct_user,only: [:destroy,:show]
   def destroy
     set_task
     @task.destroy
-
     flash[:success] = 'Task は正常に削除されました'
     render 'toppages/index'
   end
@@ -61,7 +60,7 @@ before_action :correct_user,only: [:destroy,:show]
   def correct_user
     @task = current_user.tasks.find_by(id: params[:id])
     unless @task
-      render 'toppages/index'
+     redirect_to root_url
     end
   end
 end
